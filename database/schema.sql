@@ -1,39 +1,49 @@
--- Tables
-CREATE TABLE MOVIE (
+-- MOVIE TABLE
+CREATE TABLE movie (
     movie_id SERIAL PRIMARY KEY,
-    title TEXT NOT NULL,
-    genre TEXT,
-    duration_min INT
+    movie_name VARCHAR(50) NOT NULL,
+    language VARCHAR(30),
+    duration INT,
+    rating VARCHAR(5)
 );
 
-CREATE TABLE THEATRE (
+-- THEATRE TABLE
+CREATE TABLE theatre (
     theatre_id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
-    location TEXT,
-    total_capacity INT
+    theatre_name VARCHAR(50) NOT NULL,
+    location VARCHAR(50)
 );
 
-CREATE TABLE SHOWS (
+-- SHOWS TABLE
+CREATE TABLE shows (
     show_id SERIAL PRIMARY KEY,
-    movie_id INT REFERENCES MOVIE(movie_id),
-    theatre_id INT REFERENCES THEATRE(theatre_id),
-    show_time TIMESTAMP,
-    available_seats INT,
-    price_per_seat DECIMAL(10,2)
+    movie_id INT,
+    theatre_id INT,
+    show_date DATE,
+    show_time VARCHAR(20),
+    ticket_price INT,
+    available_seats INT CHECK (available_seats >= 0),
+
+    FOREIGN KEY (movie_id) REFERENCES movie(movie_id),
+    FOREIGN KEY (theatre_id) REFERENCES theatre(theatre_id)
 );
 
-CREATE TABLE CUSTOMER (
+-- CUSTOMER TABLE
+CREATE TABLE customer (
     customer_id SERIAL PRIMARY KEY,
-    name TEXT,
-    email TEXT UNIQUE,
-    phone TEXT
+    customer_name VARCHAR(50),
+    phone_number VARCHAR(15)
 );
 
-CREATE TABLE BOOKING (
+-- BOOKING TABLE
+CREATE TABLE booking (
     booking_id SERIAL PRIMARY KEY,
-    customer_id INT REFERENCES CUSTOMER(customer_id),
-    show_id INT REFERENCES SHOWS(show_id),
-    num_seats INT,
-    total_amount DECIMAL(10,2),
-    booking_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    show_id INT,
+    customer_id INT,
+    seats_booked INT CHECK (seats_booked > 0),
+    total_amount INT,
+    booking_date DATE DEFAULT CURRENT_DATE,
+
+    FOREIGN KEY (show_id) REFERENCES shows(show_id),
+    FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
 );
