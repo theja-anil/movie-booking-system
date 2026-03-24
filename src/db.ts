@@ -1,7 +1,7 @@
 import { Pool } from 'pg';
 
 export const pool = new Pool({
-    user: 'theja',
+    user: 'postgres',
     host: 'localhost',
     database: 'movie_db',
     password: 'theja',
